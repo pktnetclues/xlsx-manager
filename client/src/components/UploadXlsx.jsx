@@ -8,7 +8,7 @@ import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
 
 const errMess = {
-  message: "Please fill out the field",
+  message: "This field is required",
 };
 
 const validationSchema = yup.object().shape({
@@ -27,7 +27,6 @@ const validationSchema = yup.object().shape({
       return file && acceptedTypes.includes(file[0]?.type);
     })
     .test("fileSize", "The file is too large", (file) => {
-      // Check if the file size is within limits
       return file && file[0]?.size < 5000000;
     }),
 });
@@ -86,7 +85,7 @@ const UploadXlsx = () => {
 
   return (
     <>
-      <Container maxWidth="sm">
+      <Container maxWidth="xs">
         <form
           name="form"
           className="shadow p-4 bg-white rounded"
