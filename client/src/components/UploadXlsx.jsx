@@ -16,7 +16,7 @@ const validationSchema = yup.object().shape({
   email: yup.string().required(errMess.message).email("Email is Invalid"),
   xlsx: yup
     .mixed()
-    .test("file", "Please upload a file", (file) => {
+    .test("file", "Please upload a Excel File", (file) => {
       return file && file.length > 0;
     })
     .test("fileType", "Only XLSX files are allowed", (file) => {

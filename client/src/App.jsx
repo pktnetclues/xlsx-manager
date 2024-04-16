@@ -8,7 +8,7 @@ import ShowData from "./components/ShowData";
 function App() {
   return (
     <Router>
-      <Toaster position="top-center" />
+      <Toaster position="top-center" richColors />
       <Routes>
         <Route path="/" element={<UploadXlsx />} />
         <Route path="/show" element={<ShowData />} />

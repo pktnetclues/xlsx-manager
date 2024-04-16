@@ -1,6 +1,6 @@
 const nodemailer = require("nodemailer");
 
-const MailSender = (name, email, rowsInserted, callback) => {
+const MailSender = (name, email, rowsInserted, fName, callback) => {
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -27,11 +27,11 @@ const MailSender = (name, email, rowsInserted, callback) => {
                 Hello ${name}!
               </h1>
               <p style="color: #2c3e50; font-family: Arial, sans-serif; font-size: 16px; margin-top: 20px;">
-                ${rowsInserted} rows were successfully inserted.
+                ${rowsInserted} rows were successfully inserted. from Excel File: ${fName}
               </p>
               <div style="margin-top: 20px; text-align: center;">
                 <span style="color: #2c3e50; font-family: Arial, sans-serif; font-size: 14px;">
-                  Made with <span class="heart">❤</span> by Pankaj Thakur
+                  Made by Pankaj Thakur
                 </span>
               </div>
             </td>
