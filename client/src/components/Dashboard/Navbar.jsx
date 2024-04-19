@@ -8,14 +8,12 @@ import {
 import HomeIcon from "@mui/icons-material/Home";
 import PersonIcon from "@mui/icons-material/Person";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
-import CssBaseline from "@mui/material/CssBaseline";
 
 const Navbar = () => {
   const [value, setValue] = useState(0);
 
   return (
-    <Box sx={{ pb: 7, width: "100%" }}>
-      <CssBaseline />
+    <Box sx={{ pb: 5, width: 500 }}>
       <Paper
         sx={{ position: "fixed", bottom: 5, left: 0, right: 0 }}
         elevation={3}
