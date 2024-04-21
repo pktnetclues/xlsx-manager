@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   Typography,
@@ -12,8 +13,15 @@ import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import CommentIcon from "@mui/icons-material/Comment";
 import SendIcon from "@mui/icons-material/Send";
+import LoadingCard from "./Loading";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import EmojiEmotionsIcon from "@mui/icons-material/EmojiEmotions";
+import data from "@emoji-mart/data";
+import Picker from "@emoji-mart/react";
 
 const PostCard = () => {
+  const navigate = useNavigate();
+
   const [liked, setLiked] = useState(false);
   const [likes, setLikes] = useState(0);
   const [disliked, setDisliked] = useState(false);
@@ -62,8 +70,10 @@ const PostCard = () => {
     }
   };
 
-  const handleCommentChange = (event) => {
-    setCommentText(event.target.value);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+
+  const handleEmojiClick = () => {
+    setShowEmojiPicker(!showEmojiPicker);
   };
 
   return (
@@ -71,9 +81,9 @@ const PostCard = () => {
       sx={{
         display: "flex",
         flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
         margin: "auto",
+        mt: 5,
+        mb: 5,
         width: "30%",
         bgcolor: "background.default",
       }}
@@ -81,7 +91,7 @@ const PostCard = () => {
       <Box
         sx={{
           bgcolor: "background.paper",
-          filter: "drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))",
+          filter: "drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.1))",
           p: 2,
         }}
       >
@@ -104,9 +114,18 @@ const PostCard = () => {
               2 hours ago
             </Typography>
           </Box>
+
+          <IconButton
+            aria-label="more"
+            color="primary"
+            sx={{ marginLeft: "auto" }}
+            onClick={() => navigate("/post/1")}
+          >
+            <ExpandMoreIcon />
+          </IconButton>
         </Box>
         <Box>
-          <Typography variant="h5" component="h2" sx={{ fontWeight: "bold" }}>
+          <Typography variant="h6" component="h4">
             What is Javascript?
           </Typography>
           <Typography variant="body2" color="textSecondary" component="p">
@@ -123,9 +142,14 @@ const PostCard = () => {
               }}
               cols={images.length}
             >
-              {images.map((image) => (
-                <ImageListItem key={image}>
-                  <img src={image} alt={image} />
+              {images.map((image, index) => (
+                <ImageListItem key={index}>
+                  <img
+                    src={image}
+                    alt={image}
+                    loading="lazy"
+                    style={{ cursor: "pointer" }}
+                  />
                 </ImageListItem>
               ))}
             </ImageList>
@@ -168,11 +192,32 @@ const PostCard = () => {
         {showCommentInput && (
           <Box mt={2} display="flex" alignItems="center">
             <Input
-              placeholder="Add a comment..."
+              placeholder="Add a comment"
               value={commentText}
-              onChange={handleCommentChange}
-              sx={{ flex: 1, mr: 1 }}
+              onChange={(e) => setCommentText(e.target.value)}
+              sx={{ flexGrow: 1 }}
             />
+
+            <IconButton
+              aria-label="emoji"
+              sx={{ color: "primary.main" }}
+              onClick={handleEmojiClick}
+            >
+              <EmojiEmotionsIcon />
+            </IconButton>
+
+            {showEmojiPicker && (
+              <Picker
+                categories={["people"]}
+                previewPosition="none"
+                theme="light"
+                data={data}
+                onEmojiSelect={(emoji) =>
+                  setCommentText(commentText + emoji.native)
+                }
+              />
+            )}
+
             <IconButton
               aria-label="comment"
               onClick={handleCommentSubmit}
@@ -190,7 +235,6 @@ const PostCard = () => {
 const images = [
   "https://source.unsplash.com/random/400x300",
   "https://source.unsplash.com/random/400x301",
-  "https://source.unsplash.com/random/400x302",
 ];
 
 const timeAgo = (timestamp) => {
