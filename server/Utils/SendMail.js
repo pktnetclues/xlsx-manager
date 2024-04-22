@@ -1,6 +1,7 @@
 const nodemailer = require("nodemailer");
+const path = require("path");
 
-const MailSender = (name, email, rowsInserted, fName, callback) => {
+const MailSender = (name, email, rowsInserted, file, callback) => {
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -27,7 +28,7 @@ const MailSender = (name, email, rowsInserted, fName, callback) => {
                 Hello ${name}!
               </h1>
               <p style="color: #2c3e50; font-family: Arial, sans-serif; font-size: 16px; margin-top: 20px;">
-                ${rowsInserted} rows were successfully inserted. from Excel File: ${fName}
+                ${rowsInserted} rows were successfully inserted.
               </p>
               <div style="margin-top: 20px; text-align: center;">
                 <span style="color: #2c3e50; font-family: Arial, sans-serif; font-size: 14px;">
@@ -41,11 +42,19 @@ const MailSender = (name, email, rowsInserted, fName, callback) => {
     </html>
   `;
 
+  console.log(file);
+
   const mailOptions = {
     from: "Pankaj Thakur 👻",
     to: email,
     subject: `Data Insertion Report for ${name}`,
     html: emailContent,
+    attachments: [
+      {
+        filename: file.originalname,
+        path: file.path,
+      },
+    ],
   };
 
   transporter.sendMail(mailOptions, (error) => {

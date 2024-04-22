@@ -15,10 +15,7 @@ const importXlsx = async (req, res) => {
     data.forEach((item) => {
       uniqueData[item.VariantID || item.SKU] = item;
     });
-
     let result = Object.values(uniqueData);
-
-    console.log(result);
 
     for (const row of result) {
       const {
@@ -50,9 +47,9 @@ const importXlsx = async (req, res) => {
     }
 
     const noOfRows = data.length;
-    const fName = req.file.originalname;
+    const file = req.file;
 
-    MailSender(name, email, noOfRows, fName, (err) => {
+    MailSender(name, email, noOfRows, file, (err) => {
       if (err) {
         console.error("Error sending email:", err);
         res.status(500).send("An error occurred while sending email.");

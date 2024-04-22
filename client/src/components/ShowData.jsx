@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import {
   Button,
@@ -10,11 +10,9 @@ import {
 import axios from "axios";
 import { toast } from "sonner";
 
-import { utils, writeFileXLSX } from "xlsx";
 import { useNavigate } from "react-router-dom";
 
 function ShowData() {
-  const tbl = useRef();
   const [products, setProducts] = useState([]);
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
@@ -58,16 +56,6 @@ function ShowData() {
     }
   };
 
-  // const downloadTable = useCallback(() => {
-  //   const wb = utils.table_to_book(tbl.current);
-  //   if (wb) {
-  //     writeFileXLSX(wb, "products.xlsx");
-  //     toast.success("file downloaded");
-  //   } else {
-  //     console.error("Workbook is empty.");
-  //   }
-  // });
-
   const handleDeleteData = async () => {
     try {
       const response = await axios.delete("http://localhost:4000/api/delete");
@@ -85,8 +73,8 @@ function ShowData() {
     { field: "ProductName", headerName: "Product Name", width: 150 },
     { field: "ID", headerName: "ID", width: 90 },
     { field: "SKU", headerName: "SKU", width: 120 },
-    { field: "VariantName", headerName: "Variant Name", width: 150 },
-    { field: "Price", headerName: "Price", type: "number", width: 120 },
+    { field: "CategoryName", headerName: "Category Name", width: 150 },
+    { field: "Price", headerName: "Actual Price", type: "number", width: 120 },
     {
       field: "DiscountedPrice",
       headerName: "Discounted Price",
@@ -96,14 +84,17 @@ function ShowData() {
     { field: "Description", headerName: "Description", width: 250 },
   ];
 
+  const rowss = products.map((product) => ({
+    ...product,
+    id: product.VariantID,
+  }));
+
+  console.log(rowss);
+
   return (
     <div style={{ height: 400, width: "100%" }}>
       <DataGrid
-        ref={tbl}
-        rows={products.map((product) => ({
-          ...product,
-          id: product.VariantID,
-        }))}
+        rows={rowss}
         columns={columns}
         initialState={{
           pagination: {
@@ -113,7 +104,6 @@ function ShowData() {
           },
         }}
         paginationMode="client"
-        // checkboxSelection
         disableSelectionOnClick
       />
       <Grid className="grid" container columnSpacing={3}>

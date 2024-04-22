@@ -5,19 +5,19 @@ const sequelize = require("../Utils/sequelize");
 const exportXlsx = async (req, res) => {
   try {
     const query = `
-      SELECT p.ProductName, p.ID, p.SKU, p.VariantID, v.VariantName, p.Price, p.DiscountPercentage,
-      (p.Price - (p.Price * p.DiscountPercentage / 100)) AS DiscountedPrice,
-      p.Description
+      SELECT p.ProductName, p.ID, p.SKU, p.VariantID, p.CategoryID, c.CategoryName, p.Price, p.DiscountPercentage, p.Description
       FROM products AS p
-      INNER JOIN variants AS v ON p.VariantID = v.VariantID
+      INNER JOIN categories AS c ON p.CategoryID = c.CategoryID
     `;
 
     const products = await sequelize.query(query, { type: QueryTypes.SELECT });
 
     const data = products.map((product) => ({
       ...product,
-      DiscountedPrice:
-        product.Price - (product.Price * product.DiscountPercentage) / 100,
+      DiscountedPrice: (
+        product.Price -
+        (product.Price * product.DiscountPercentage) / 100
+      ).toFixed(2),
     }));
 
     const worksheet = xlsx.utils.json_to_sheet(data);
