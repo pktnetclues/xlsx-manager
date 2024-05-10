@@ -1,5 +1,4 @@
 const express = require("express");
-const sequelize = require("./Utils/sequelize");
 const cors = require("cors");
 const dotenv = require("dotenv");
 
@@ -22,8 +21,6 @@ app.use(
 
 app.use("/api", router);
 
-sequelize;
-
-app.listen(4000, () => {
+app.listen(5000, () => {
   console.log("Server is running on port 4000");
 });

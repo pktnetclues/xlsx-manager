@@ -1,7 +1,7 @@
 const nodemailer = require("nodemailer");
 const path = require("path");
 
-const MailSender = (name, email, rowsInserted, file, callback) => {
+const MailSender = async (name, email, file, callback) => {
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -12,14 +12,6 @@ const MailSender = (name, email, rowsInserted, file, callback) => {
 
   let emailContent = `
     <html>
-      <head>
-        <style>
-            .heart {
-                color: #e25555;
-            }
-            
-        </style>
-      </head>
       <body>
         <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
           <tr>
@@ -28,13 +20,8 @@ const MailSender = (name, email, rowsInserted, file, callback) => {
                 Hello ${name}!
               </h1>
               <p style="color: #2c3e50; font-family: Arial, sans-serif; font-size: 16px; margin-top: 20px;">
-                ${rowsInserted} rows were successfully inserted.
+                Your HTML File is conerted to pdf, Please check the attachment
               </p>
-              <div style="margin-top: 20px; text-align: center;">
-                <span style="color: #2c3e50; font-family: Arial, sans-serif; font-size: 14px;">
-                  Made by Pankaj Thakur
-                </span>
-              </div>
             </td>
           </tr>
         </table>
@@ -45,14 +32,14 @@ const MailSender = (name, email, rowsInserted, file, callback) => {
   console.log(file);
 
   const mailOptions = {
-    from: "Pankaj Thakur 👻",
+    from: "Pankaj Thakur",
     to: email,
-    subject: `Data Insertion Report for ${name}`,
+    subject: `PDF File for Uploaded html`,
     html: emailContent,
     attachments: [
       {
-        filename: file.originalname,
-        path: file.path,
+        path: file,
+        filename: `${name}.pdf`,
       },
     ],
   };
